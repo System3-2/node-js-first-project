@@ -1,10 +1,5 @@
-const _ = require('lodash');
+const { writeFileSync } = require('fs');
 
-const items = [1, [2,[3,[4]]]];
-const newItems = _.flattenDeep(items);
-console.log(newItems);
-console.log('Hello World!');
-console.log('Hello Nodemon!');
-console.log('Hello Nodemon!');
-
-
+for(let i = 0; i< 10000; i++){
+  writeFileSync('./content/generic/big.txt',`hello world ${i}`,{ flag: 'a'});
+}
