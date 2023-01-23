@@ -1,47 +1,17 @@
-const http = require("http");
-const PORT = 5000;
-const { readFileSync } = require("fs");
-const homePage = readFileSync("./navbar-app/index.html");
-const homeStyles = readFileSync("./navbar-app/styles.css");
-const homeImg = readFileSync("./navbar-app/logo.svg");
-const homeLogic = readFileSync("./navbar-app/browser-app.js");
+const express = require("express");
+const path = require("path");
+const app = express();
 
-const server = http.createServer((req, res) => {
-  const url = req.url;
+app.use(express.static("./public"));
 
-  if (url === "/") {
-    res.writeHead(200, {
-      "content-type": "text/html",
-    });
-    res.write(homePage);
-    res.end();
-  } else if (url === "/styles.css") {
-    res.writeHead(200, {
-      "content-type": "text/css",
-    });
-    res.write(homeStyles);
-    res.end();
-  } else if (url === "/logo.svg") {
-    res.writeHead(200, {
-      "content-type": "image/svg+xml",
-    });
-    res.write(homeImg);
-    res.end();
-  } else if (url === "/browser-app.js") {
-    res.writeHead(200, {
-      "content-type": "text/javascript",
-    });
-    res.write(homeLogic);
-    res.end();
-  } else {
-    res.writeHead(404, {
-      "content-type": "text/html",
-    });
-    res.write(`<h1>Page not found</h1>`);
-    res.end();
-  }
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./navbar-app/index.html"));
 });
 
-server.listen(PORT, () => {
-  console.log(`server is running on port: ${PORT}`);
+app.get("*", (req, res) => {
+  res.status(404).send(`resource not found`);
+});
+
+app.listen(5000, () => {
+  console.log(`server is listening on port 5000...`);
 });
