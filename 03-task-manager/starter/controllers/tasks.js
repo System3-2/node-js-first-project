@@ -1,5 +1,4 @@
 const Task = require("../models/Task");
-const asyncWrapper = require("../middleware/async");
 
 const getAllTasks = async (req, res) => {
   const task = await Task.find({}, (error, data) => {
@@ -74,4 +73,5 @@ module.exports = {
   getTask,
   updateTask,
   deleteTask,
+
 };
