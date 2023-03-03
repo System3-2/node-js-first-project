@@ -3,13 +3,19 @@ require('express-async-errors');
 
 const express = require('express');
 const app = express();
+app.use(express.static('./public'))
+app.use(express.json());
+
+//routes
+const mainRouter = require('./routes/main');
+app.use('/api/v1', mainRouter);
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
+
 // middleware
-app.use(express.static('./public'));
-app.use(express.json());
+// app.use(express.static('./public'));
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
