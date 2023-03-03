@@ -1,4 +1,6 @@
 const CustomApiError = require("../errors/custom-error");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -8,17 +10,18 @@ const login = async (req, res) => {
     // check for username
     throw new CustomApiError("Please provide username and password", 400);
   }
-  res.send("Fake login resgister/signup");
+  const id = new Date().getTime;
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRET);
+
+  res.status(200).json({ msg: "user created", token });
 };
 
 const dashboard = async (req, res) => {
-  const luckyNumber = Math.floor(Math.random() * 100);
-  res
-    .status(200)
-    .json({
-      msg: `Hello john doe!`,
-      secret: `here is your lucky number ${luckyNumber}`,
-    });
+  const {username, iat} = (req.user);
+  const luckNumber = Math.floor(Math.random() * 100);
+  res.status(200).json({
+    msg: `Hello ${username}, your lucky number is ${luckNumber}`,
+  });
 };
 
 module.exports = {
